@@ -49,6 +49,8 @@ public class TowerTest : MonoBehaviour
 
     public int currUpgradeStage;
 
+    public GameManager gm;
+
 
     
 
@@ -60,6 +62,8 @@ public class TowerTest : MonoBehaviour
         UpgradeNameText = UpgradePanel.transform.Find("UpgradeName").gameObject.GetComponent<TMP_Text>();
         UpgradeCostText = UpgradePanel.transform.Find("UpgradeCost").gameObject.GetComponent<TMP_Text>();
         UpgradeImage = UpgradePanel.transform.Find("UpgradeImage").gameObject.GetComponent<Image>();
+
+        gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
     // Start is called before the first frame update
     void Start()
@@ -79,7 +83,6 @@ public class TowerTest : MonoBehaviour
             RangeIndicator.SetActive(false);
         }
         isHovering = false;
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -176,15 +179,25 @@ public void TurnToEnemy()
     private void OnMouseDown()
     {
         //do the funny tower information
-        isClicked = true;
-        SetTowerInformation();
+        if (gm.SelectedTower != gameObject)
+        {
+            isClicked = true;
+            UpgradePanel.SetActive(true);
+            Debug.Log("Upgrade panel is " + UpgradePanel.activeSelf);
+            SetTowerInformation();
+            gm.SelectedTower = gameObject;
+        }
+
     }
 
     private void OnMouseOver()
     {
         RangeIndicator.SetActive(true);
         isHovering = true;
+        gm.isOverTower = true;
+
     }
+
 
     public void SetTowerInformation()
     {

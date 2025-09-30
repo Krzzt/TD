@@ -140,6 +140,7 @@ MonoBehaviour:
   MaxHealth: 4
   time: 0
   MapCompletion: 0
+  RewardMoneyOnDeath: 4
 --- !u!50 &3086969962111939580
 Rigidbody2D:
   serializedVersion: 4

@@ -19,6 +19,8 @@ public class Enemy : MonoBehaviour
     public float time; //the time the enemy has been alive for
     public float MapCompletion; //a value between 0 and 1 where 0 is the beginning of the track and 1 is the end
 
+    public int RewardMoneyOnDeath;
+
     private void Awake()
     {
         gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
@@ -51,6 +53,7 @@ public class Enemy : MonoBehaviour
                 isOut = true;
                 LoseLives();
                 Destroy(gameObject);
+                spawner.EnemiesAlive.Remove(gameObject);
             }
         }
     }
