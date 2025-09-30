@@ -113,7 +113,7 @@ Transform:
   m_GameObject: {fileID: 477213827274001252}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.77, y: 1.38, z: -0.047513526}
+  m_LocalPosition: {x: -6.77, y: 1.38, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -223,11 +223,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemiesInRange: []
   EnemyProgression: []
-  AttackSpeed: 1
+  AttackSpeed: 0.5
   AttackReady: 0
   Damage: 2
   ShotSpeed: 15
-  BulletLifeTime: 0
+  BulletLifeTime: 5
   targeting: 0
   BulletPrefab: {fileID: 6697308885025091323, guid: abe55ffef694ffd4c97ac7f849a659fe, type: 3}
   BulletPoint: {fileID: 6074449075102540544}
@@ -258,6 +258,8 @@ MonoBehaviour:
   UpgradeNameText: {fileID: 0}
   UpgradeCostText: {fileID: 0}
   UpgradeImage: {fileID: 0}
+  currUpgradeStage: 0
+  gm: {fileID: 0}
 --- !u!50 &489685900326790864
 Rigidbody2D:
   serializedVersion: 4

@@ -27,25 +27,28 @@ public class TowerPlacing : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (isSelected && Input.GetMouseButtonUp(0))
         {
             isSelected = false;
+            gm.PlaceTower();
             //place tower
         }
+
     }
 
 
     private void OnMouseDown()
     {
         isSelected = true;
+        gm.SelectedTowerInUI = gameObject;
     }
     
     public void OnEndDrag()
     {
-        Debug.Log("end drag");
-
+        isSelected = false;
+        gm.PlaceTower();
 
 
     }

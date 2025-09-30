@@ -41,7 +41,6 @@ public class TowerTest : MonoBehaviour
     public bool isClicked;
     public bool isHovering;
 
-    public GameObject UpgradePanel;
     public TMP_Text UpgradeTowerNameText;
     public TMP_Text UpgradeNameText;
     public TMP_Text UpgradeCostText;
@@ -57,11 +56,7 @@ public class TowerTest : MonoBehaviour
     private void Awake()
     {
         AttackReady = true;
-        UpgradePanel = GameObject.FindWithTag("Upgrade");
-        UpgradeTowerNameText = UpgradePanel.transform.Find("TowerName").gameObject.GetComponent<TMP_Text>();
-        UpgradeNameText = UpgradePanel.transform.Find("UpgradeName").gameObject.GetComponent<TMP_Text>();
-        UpgradeCostText = UpgradePanel.transform.Find("UpgradeCost").gameObject.GetComponent<TMP_Text>();
-        UpgradeImage = UpgradePanel.transform.Find("UpgradeImage").gameObject.GetComponent<Image>();
+
 
         gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
@@ -82,6 +77,8 @@ public class TowerTest : MonoBehaviour
         {
             RangeIndicator.SetActive(false);
         }
+
+
         isHovering = false;
     }
 
@@ -182,10 +179,13 @@ public void TurnToEnemy()
         if (gm.SelectedTower != gameObject)
         {
             isClicked = true;
-            UpgradePanel.SetActive(true);
-            Debug.Log("Upgrade panel is " + UpgradePanel.activeSelf);
+            gm.UpgradePanel.SetActive(true);
             SetTowerInformation();
             gm.SelectedTower = gameObject;
+        }
+        else
+        {
+            gm.DeselectTower();
         }
 
     }
@@ -201,6 +201,12 @@ public void TurnToEnemy()
 
     public void SetTowerInformation()
     {
+        UpgradeTowerNameText = gm.UpgradePanel.transform.Find("TowerName").gameObject.GetComponent<TMP_Text>();
+        UpgradeNameText = gm.UpgradePanel.transform.Find("UpgradeName").gameObject.GetComponent<TMP_Text>();
+        UpgradeCostText = gm.UpgradePanel.transform.Find("UpgradeCost").gameObject.GetComponent<TMP_Text>();
+        UpgradeCostText = gm.UpgradePanel.transform.Find("UpgradeCost").gameObject.GetComponent<TMP_Text>();
+        UpgradeImage = gm.UpgradePanel.transform.Find("UpgradeImage").gameObject.GetComponent<Image>();
+
         UpgradeTowerNameText.SetText(TowerName);
         UpgradeNameText.SetText(UpgradeNames[currUpgradeStage]);
         UpgradeCostText.SetText(UpgradeCosts[currUpgradeStage]);

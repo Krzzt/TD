@@ -8,6 +8,8 @@ public class DeselectTower : MonoBehaviour
 
     private GameManager gm;
 
+    public bool needsToBeDeselected;
+
     private void Awake()
     {
         gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
@@ -24,11 +26,23 @@ public class DeselectTower : MonoBehaviour
         
     }
 
-    private void OnMouseOver()
+
+    private void OnMouseEnter()
     {
-        gm.IsSelectingAnyTowerUI = false;
-        gm.SelectedTower = null;
-        Debug.Log("AAAAAA");
+       if (needsToBeDeselected)
+        {
+            gm.DeselectTowerUI();
+            needsToBeDeselected= false;
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        if (gm.SelectedTowerInUI != null)
+        {
+            needsToBeDeselected = true;
+        }
+
     }
 
     //okay let me write out the problem: i want a "deadzone" that if you go to it, it deselects a tower you selected. That deadzone is the tower selection UI. SO it will get deselected instantly
