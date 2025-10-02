@@ -94,11 +94,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1642926783154976707}
   - component: {fileID: 1744064014654081522}
-  - component: {fileID: 6745627586154195668}
-  - component: {fileID: 489685900326790864}
-  - component: {fileID: 4108668557155589812}
+  - component: {fileID: 4549780144368523450}
+  - component: {fileID: 6486628306023111747}
+  - component: {fileID: 5146329482658715146}
   m_Layer: 2
-  m_Name: TowerTest
+  m_Name: MockTowerTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,9 +117,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6074449075102540544}
   - {fileID: 3767465402268722207}
-  - {fileID: 7837387573515451964}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1744064014654081522
@@ -174,7 +172,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6745627586154195668
+--- !u!114 &4549780144368523450
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,75 +181,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 477213827274001252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cca9ed88f33b6c0478b88a3a095f9a5b, type: 3}
+  m_Script: {fileID: 11500000, guid: 095d194dfc8d7d0438ffcea79fdf0809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemiesInRange: []
-  EnemyProgression: []
-  AttackSpeed: 0.5
-  AttackReady: 0
-  Damage: 2
-  ShotSpeed: 15
-  BulletLifeTime: 5
-  targeting: 0
-  BulletPrefab: {fileID: 6697308885025091323, guid: abe55ffef694ffd4c97ac7f849a659fe, type: 3}
-  BulletPoint: {fileID: 6074449075102540544}
-  TargetEnemy: {fileID: 0}
-  distance: 0
-  Pierce: 2
-  RangeIndicator: {fileID: 290288733151422514}
-  TowerName: Huntress
-  UpgradeNames:
-  - Upgrade0
-  - Upgrade1
-  - Upgrade2
-  - Upgrade3
-  UpgradeCosts:
-  - 0$
-  - 100$
-  - 200$
-  - 500$
-  UpgradeSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  isClicked: 0
-  isHovering: 0
-  UpgradeTowerNameText: {fileID: 0}
-  UpgradeNameText: {fileID: 0}
-  UpgradeCostText: {fileID: 0}
-  UpgradeImage: {fileID: 0}
-  currUpgradeStage: 0
-  gm: {fileID: 0}
---- !u!50 &489685900326790864
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 477213827274001252}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 100000
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 4
---- !u!58 &4108668557155589812
+--- !u!58 &6486628306023111747
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -285,48 +218,23 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 5
---- !u!1 &7712275421791063075
-GameObject:
+  m_Radius: 0.5
+--- !u!50 &5146329482658715146
+Rigidbody2D:
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7837387573515451964}
-  - component: {fileID: 6117386724312602207}
-  m_Layer: 0
-  m_Name: ClickableCircle
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7837387573515451964
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7712275421791063075}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1642926783154976707}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &6117386724312602207
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7712275421791063075}
-  m_Enabled: 1
-  m_Density: 1
+  m_GameObject: {fileID: 477213827274001252}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -334,53 +242,7 @@ CircleCollider2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
---- !u!1 &7714698026306622983
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6074449075102540544}
-  m_Layer: 0
-  m_Name: BulletPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6074449075102540544
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7714698026306622983}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.526, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1642926783154976707}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4

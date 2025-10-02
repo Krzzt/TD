@@ -1,8 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
+
+
+//BTW we use the fucking Z-Axis to put the collision of this deadzone "behind" the tower UI because thats how it fucking works i guess
 public class DeselectTower : MonoBehaviour
 {
 
@@ -27,13 +32,15 @@ public class DeselectTower : MonoBehaviour
     }
 
 
-    private void OnMouseEnter()
+    private void OnMouseOver()
     {
        if (needsToBeDeselected)
         {
             gm.DeselectTowerUI();
             needsToBeDeselected= false;
+
         }
+
     }
 
     private void OnMouseExit()
@@ -41,10 +48,9 @@ public class DeselectTower : MonoBehaviour
         if (gm.SelectedTowerInUI != null)
         {
             needsToBeDeselected = true;
+
         }
 
     }
 
-    //okay let me write out the problem: i want a "deadzone" that if you go to it, it deselects a tower you selected. That deadzone is the tower selection UI. SO it will get deselected instantly
-    //because im always in the deadzone. So we need to check if you leave the deadzone with a tower selected an when you enter it again
 }

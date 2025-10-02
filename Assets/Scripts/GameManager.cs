@@ -26,6 +26,10 @@ public class GameManager : MonoBehaviour
 
 
     public GameObject UpgradePanel;
+
+    public bool TowerIsInPlaceablePos;
+
+    public GameObject MockTower;
     private void Awake()
     {
         DT = GameObject.FindWithTag("Deadzone").GetComponent<DeselectTower>();
@@ -47,6 +51,10 @@ public class GameManager : MonoBehaviour
                 DeselectTower();
             }
             isOverTower = false; //this is always set false here but the script in the towers runs after that so it can get set true if you hover over a tower
+        }
+
+        if (SelectedTowerInUI != null)
+        {
         }
       
 
@@ -70,6 +78,8 @@ public class GameManager : MonoBehaviour
     {
         SelectedTowerInUI.GetComponent<TowerPlacing>().isSelected = false;
         SelectedTowerInUI = null;
+        Destroy(MockTower);
+        MockTower = null;
         //destroy the fake tower
         Debug.Log("deselected the tower");
 
@@ -81,10 +91,17 @@ public class GameManager : MonoBehaviour
         //Instantiate the tower at position of the mouse
         if (CurrMoney >= TowerToPlace.cost)
         {
-            GiveMoney(-TowerToPlace.cost); //we give the player the negative amount of the cost
-            Vector3 PlacementVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            PlacementVector = new Vector3(PlacementVector.x, PlacementVector.y, 0);
-            GameObject newTower = Instantiate(TowerPrefabs[TowerToPlace.ID], PlacementVector, Quaternion.identity, GameObject.FindWithTag("PlacedTowers").transform);
+            if (TowerIsInPlaceablePos)
+            {
+                GiveMoney(-TowerToPlace.cost); //we give the player the negative amount of the cost
+                Vector3 PlacementVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                PlacementVector = new Vector3(PlacementVector.x, PlacementVector.y, 0);
+                GameObject newTower = Instantiate(TowerPrefabs[TowerToPlace.ID], PlacementVector, Quaternion.identity, GameObject.FindWithTag("PlacedTowers").transform);
+            }
+            else
+            {
+                Debug.Log("LOOOOSER");
+            }
         }
         else
         {
