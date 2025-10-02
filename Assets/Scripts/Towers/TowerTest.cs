@@ -178,10 +178,9 @@ public void TurnToEnemy()
         //do the funny tower information
         if (gm.SelectedTower != gameObject)
         {
-            isClicked = true;
-            gm.UpgradePanel.SetActive(true);
-            SetTowerInformation();
-            gm.SelectedTower = gameObject;
+
+            StartCoroutine(SetNewSelectedTower());
+
         }
         else
         {
@@ -190,6 +189,16 @@ public void TurnToEnemy()
 
     }
 
+
+    public IEnumerator SetNewSelectedTower() //we need to wait a frame because of some shenanigans with the RangeIndicator and this code happening before code in the GameManager
+    {
+        yield return new WaitForEndOfFrame();
+        isClicked = true;
+        gm.UpgradePanel.SetActive(true);
+        SetTowerInformation();
+        gm.SelectedTower = gameObject;
+
+    }
     private void OnMouseOver()
     {
         RangeIndicator.SetActive(true);
