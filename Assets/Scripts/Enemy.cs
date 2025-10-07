@@ -21,6 +21,8 @@ public class Enemy : MonoBehaviour
 
     public int RewardMoneyOnDeath;
 
+    public bool Aura;
+
     private void Awake()
     {
         gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
@@ -74,6 +76,7 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
+        gm.GiveMoney(RewardMoneyOnDeath);
         spawner.EnemiesAlive.Remove(gameObject);
         Destroy(gameObject);
     }

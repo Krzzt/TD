@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -15,8 +16,11 @@ public class EnemySpawner : MonoBehaviour
     public float WaveTimer;
     public float TimeLeftInWave;
     public bool EveryEnemySpawned;
+
+    private TMP_Text WaveText;
     private void Awake()
     {
+        WaveText = GameObject.FindWithTag("WaveText").GetComponent<TMP_Text>();
         Marks = GameObject.FindGameObjectsWithTag("Mark").ToList<GameObject>(); //we set the marks
         for (int a = 0; a < Marks.Count; a++)
         {
@@ -55,6 +59,7 @@ public class EnemySpawner : MonoBehaviour
 
     public IEnumerator SpawnEnemies(int wave)
     {
+        yield return new WaitForSeconds(2.5f); //wait for 2.5 secs between the waves
 
         switch (wave)
         {
@@ -88,6 +93,7 @@ public class EnemySpawner : MonoBehaviour
     {
         EveryEnemySpawned = false;
         WaveCounter++;
+        WaveText.SetText("Wave " + WaveCounter);
         StartCoroutine(SpawnEnemies(WaveCounter));
     }
 }

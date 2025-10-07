@@ -162,7 +162,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 0, g: 0.64651275, b: 1, a: 1}
   m_FlipX: 0
@@ -186,19 +186,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cca9ed88f33b6c0478b88a3a095f9a5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TowerID: 0
   EnemiesInRange: []
   EnemyProgression: []
-  AttackSpeed: 0.5
+  AttackSpeed: 0.8
   AttackReady: 0
   Damage: 2
-  ShotSpeed: 15
+  ShotSpeed: 20
   BulletLifeTime: 5
   targeting: 0
   BulletPrefab: {fileID: 6697308885025091323, guid: abe55ffef694ffd4c97ac7f849a659fe, type: 3}
   BulletPoint: {fileID: 6074449075102540544}
   TargetEnemy: {fileID: 0}
   distance: 0
-  Pierce: 2
+  Pierce: 1
   RangeIndicator: {fileID: 290288733151422514}
   TowerName: Huntress
   UpgradeNames:
@@ -222,8 +223,8 @@ MonoBehaviour:
   UpgradeNameText: {fileID: 0}
   UpgradeCostText: {fileID: 0}
   UpgradeImage: {fileID: 0}
-  currUpgradeStage: 0
   gm: {fileID: 0}
+  CanReadAura: 0
 --- !u!50 &489685900326790864
 Rigidbody2D:
   serializedVersion: 4

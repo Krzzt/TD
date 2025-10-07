@@ -11,6 +11,11 @@ TagManager:
   - Upgrade
   - Deadzone
   - PlacedTowers
+  - MoneyText
+  - WaveText
+  - EquippedAddOnSelector
+  - UpgradeArea
+  - AddOnSelector
   layers:
   - Default
   - TransparentFX

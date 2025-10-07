@@ -10,7 +10,8 @@ using TMPro;
 
 public class TowerTest : MonoBehaviour
 {
-
+    public int TowerID;
+    
     public List<GameObject> EnemiesInRange; //a list of every Enemy in range
     public List<float> EnemyProgression;
     public float AttackSpeed; //how long an attack takes in seconds
@@ -18,6 +19,8 @@ public class TowerTest : MonoBehaviour
     public int Damage; //the damage the tower does
     public float ShotSpeed; //how fast the bullets travel
     public float BulletLifeTime;
+
+
 
     public int targeting; //--> different number means different targeting: 0 = first, 1 = last, 2 = strong
 
@@ -46,11 +49,11 @@ public class TowerTest : MonoBehaviour
     public TMP_Text UpgradeCostText;
     public Image UpgradeImage;
 
-    public int currUpgradeStage;
-
     public GameManager gm;
 
+    public AddOn[] equippedAddOns;
 
+    public bool CanReadAura;
     
 
     private void Awake()
@@ -59,6 +62,7 @@ public class TowerTest : MonoBehaviour
 
 
         gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        equippedAddOns = new AddOn[2];
     }
     // Start is called before the first frame update
     void Start()
@@ -84,9 +88,20 @@ public class TowerTest : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy")) //if the new collision is an enemy
         {
-            EnemiesInRange.Add(collision.gameObject);
+          if (collision.gameObject.GetComponent<Enemy>().Aura) //if the enemy has Aura (so camo basically)
+           {
+                if (CanReadAura) //and if we can read aura
+                {
+                    EnemiesInRange.Add(collision.gameObject); //enemy is added to the list
+                }
+           }
+          else //if the enemy has no aura
+          {
+            EnemiesInRange.Add(collision.gameObject); //we add it to the list
+          }
+
         }
     }
 
@@ -94,12 +109,24 @@ public class TowerTest : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            EnemiesInRange.Remove(collision.gameObject);
+            if (collision.gameObject.GetComponent<Enemy>().Aura) //if the enemy has Aura (so camo basically)
+            {
+                if (CanReadAura) //and if we can read aura
+                {
+                    EnemiesInRange.Remove(collision.gameObject); //enemy is removed from the list
+                    //we do this to prevent stupid Null errors
+                }
+            }
+            else
+            {
+                EnemiesInRange.Remove(collision.gameObject);
+            }
+
         }
     }
 
 
-    public void Attack()
+    public void Attack() 
     {
         EnemyProgression.Clear();
         //attack
@@ -194,14 +221,22 @@ public void TurnToEnemy()
     {
         yield return new WaitForEndOfFrame();
         isClicked = true;
-        gm.UpgradePanel.SetActive(true);
+        gm.UpgradePanel.SetActive(true); //set the Upgrade UI true
+        gm.UpgradeArea.SetActive(true); // set the Upgrade Collision True
         SetTowerInformation();
         gm.SelectedTower = gameObject;
 
+        gm.SelectEquippedAddOn(0);
+        gm.SelectAddOn(0);
+        //make a standard Selection
     }
     private void OnMouseOver()
     {
-        RangeIndicator.SetActive(true);
+        if (gm.MockTower == null)
+        {
+            RangeIndicator.SetActive(true);
+        }
+
         isHovering = true;
         gm.isOverTower = true;
 
@@ -211,15 +246,163 @@ public void TurnToEnemy()
     public void SetTowerInformation()
     {
         UpgradeTowerNameText = gm.UpgradePanel.transform.Find("TowerName").gameObject.GetComponent<TMP_Text>();
-        UpgradeNameText = gm.UpgradePanel.transform.Find("UpgradeName").gameObject.GetComponent<TMP_Text>();
-        UpgradeCostText = gm.UpgradePanel.transform.Find("UpgradeCost").gameObject.GetComponent<TMP_Text>();
-        UpgradeCostText = gm.UpgradePanel.transform.Find("UpgradeCost").gameObject.GetComponent<TMP_Text>();
-        UpgradeImage = gm.UpgradePanel.transform.Find("UpgradeImage").gameObject.GetComponent<Image>();
+        //UpgradeNameText = gm.UpgradePanel.transform.Find("UpgradeName").gameObject.GetComponent<TMP_Text>();
+        //UpgradeCostText = gm.UpgradePanel.transform.Find("UpgradeCost").gameObject.GetComponent<TMP_Text>();
+        //UpgradeCostText = gm.UpgradePanel.transform.Find("UpgradeCost").gameObject.GetComponent<TMP_Text>();
+        //UpgradeImage = gm.UpgradePanel.transform.Find("UpgradeImage").gameObject.GetComponent<Image>();
 
         UpgradeTowerNameText.SetText(TowerName);
-        UpgradeNameText.SetText(UpgradeNames[currUpgradeStage]);
-        UpgradeCostText.SetText(UpgradeCosts[currUpgradeStage]);
-        UpgradeImage.sprite = UpgradeSprites[currUpgradeStage];
+       // UpgradeNameText.SetText(UpgradeNames[currUpgradeStage]);
+        //UpgradeCostText.SetText(UpgradeCosts[currUpgradeStage]);
+        //UpgradeImage.sprite = UpgradeSprites[currUpgradeStage];
+
+        for (int i = 0; i < gm.AddOnSprites[TowerID].sprites.Count; i++)
+        {
+            gm.AddOnImages[i].sprite = gm.AddOnSprites[TowerID].sprites[i];
+        }
+    }
+
+    public void ChangeAddOns(int WhichAddonSwitches, int newAddonID) //i want to change this so every killer has addons and can equip 2 of them at once
+    {
+        if (equippedAddOns[WhichAddonSwitches] != null)
+        {
+            switch (equippedAddOns[WhichAddonSwitches].ID) //this reverts the effects of the now unequipped addon
+            {
+                case 0:
+                    AttackSpeed += 0.1f;
+                    break;
+                case 1:
+                    Pierce -= 1;
+                    break;
+                case 2:
+                    AttackSpeed += 0.2f;
+                    break;
+                case 3:
+                    //after stunning is implemented
+                    break;
+                case 4:
+                    //after the waves of 2 are implemented
+                    break;
+                case 5:
+                    Pierce -= 4;
+                    break;
+                case 6:
+                    //the aura reading is a bit more complicated so we check for that at the end
+                    Damage -= 4;
+                    break;
+                case 7:
+                    //another stun L
+                    break;
+                case 8:
+                    Damage -= 20;
+                    break;
+                case 9:
+                    AttackSpeed *= 2f;
+                    Pierce -= 5;
+                    //aura reading and stuff
+                    break;
+                default: Debug.Log("nothing selected"); break; //if nothing is equipped, we change nothing
+
+            }
+        }
+ 
+        equippedAddOns[WhichAddonSwitches] = AddOnList.TowerAddOns[TowerID][newAddonID]; //dont know if this works yet
+
+        switch (equippedAddOns[WhichAddonSwitches].ID) //this reverts the effects of the now unequipped addon
+        {
+            case 0:
+                AttackSpeed -= 0.1f;
+                break;
+            case 1:
+                Pierce += 1;
+                break;
+            case 2:
+                AttackSpeed -= 0.2f;
+                break;
+            case 3:
+                //after stunning is implemented
+                break;
+            case 4:
+                //after the waves of 2 are implemented
+                break;
+            case 5:
+                Pierce += 4;
+                break;
+            case 6:
+                //the aura reading is a bit more complicated so we check for that at the end
+                Damage += 4;
+                break;
+            case 7:
+                //another stun L
+                break;
+            case 8:
+                Damage += 20;
+                break;
+            case 9:
+                AttackSpeed /= 2f;
+                Pierce += 5;
+                //aura reading and stuff
+                break;
+            default: break; //if nothing is equipped, we change nothing
+
+        }
+
+        CheckForAuraReading();
+    }
+
+    public void UnEquipAddOn(int equippedAddOnID)
+    {
+        switch (equippedAddOns[equippedAddOnID].ID) //this reverts the effects of the now unequipped addon
+        {
+            case 0:
+                AttackSpeed += 0.1f;
+                break;
+            case 1:
+                Pierce -= 1;
+                break;
+            case 2:
+                AttackSpeed += 0.2f;
+                break;
+            case 3:
+                //after stunning is implemented
+                break;
+            case 4:
+                //after the waves of 2 are implemented
+                break;
+            case 5:
+                Pierce -= 4;
+                break;
+            case 6:
+                //the aura reading is a bit more complicated so we check for that at the end
+                Damage -= 4;
+                break;
+            case 7:
+                //another stun L
+                break;
+            case 8:
+                Damage -= 20;
+                break;
+            case 9:
+                AttackSpeed *= 2f;
+                Pierce -= 5;
+                //aura reading and stuff
+                break;
+            default: Debug.Log("nothing selected"); break; //if nothing is equipped, we change nothing
+
+        }
+
+        CheckForAuraReading();
+    }
+
+    public void CheckForAuraReading() //if at leats 1 of the 2 equippedAddOns has Aura Reading, it can read aura
+    {
+        foreach (AddOn AO in equippedAddOns)
+        {
+            if  (AO != null && AO.givesAuraReading )
+            {
+                CanReadAura = true;
+            }
+        }
     }
 
 }

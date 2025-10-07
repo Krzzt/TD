@@ -7,12 +7,14 @@ public class Bullet : MonoBehaviour
     public TowerTest BulletParent;
     public int remainingPierce;
     public float BulletLifeTime;
+    public bool canHitAura;
 
     private void Awake()
     {
         BulletParent = gameObject.transform.parent.gameObject.GetComponent<TowerTest>();
         remainingPierce = BulletParent.Pierce;
         BulletLifeTime = BulletParent.BulletLifeTime;
+        canHitAura = BulletParent.CanReadAura;
 
     }
     // Start is called before the first frame update
@@ -32,13 +34,31 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            remainingPierce--;
-            collision.gameObject.GetComponent<Enemy>().TakeDamage(BulletParent.Damage);
-
-            if (remainingPierce <= 0)
+            if (collision.gameObject.GetComponent<Enemy>().Aura)
             {
-                Destroy(gameObject);
+                if (canHitAura)
+                {
+                    remainingPierce--;
+                    collision.gameObject.GetComponent<Enemy>().TakeDamage(BulletParent.Damage);
+
+                    if (remainingPierce <= 0)
+                    {
+                        Destroy(gameObject);
+                    }
+                }
+                //it only does nothing if the enemy has aura and we cant see it.
             }
+            else
+            {
+                remainingPierce--;
+                collision.gameObject.GetComponent<Enemy>().TakeDamage(BulletParent.Damage);
+
+                if (remainingPierce <= 0)
+                {
+                    Destroy(gameObject);
+                }
+            }
+
         }
     }
 
