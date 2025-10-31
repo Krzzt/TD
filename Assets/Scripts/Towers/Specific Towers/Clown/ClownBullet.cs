@@ -20,6 +20,7 @@ public class ClownBullet : Bullet
         remainingPierce = BulletParent.Pierce;
         BulletLifeTime = BulletParent.BulletLifeTime;
         canHitAura = BulletParent.CanReadAura;
+        Debug.Log("Instantiated");
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
@@ -38,7 +39,7 @@ public class ClownBullet : Bullet
                         
                         rb.velocity = Vector3.zero;
                         Activate();
-                        
+                        Debug.Log("boom");
                     }
                 }
                 //it only does nothing if the enemy has aura and we cant see it.
@@ -50,7 +51,10 @@ public class ClownBullet : Bullet
 
                 if (remainingPierce <= 0)
                 {
-                    Destroy(gameObject);
+
+                    rb.velocity = Vector3.zero;
+                    Activate();
+                    Debug.Log("boom");
                 }
             }
 
@@ -62,7 +66,7 @@ public class ClownBullet : Bullet
     {
         bulletCollider.enabled = false;
         cloudRange.enabled = true;
-
+        
         //change Sprite
         gameObject.GetComponent<SpriteRenderer>().sprite = BottleSprite;
         gameObject.transform.localScale = new Vector3(BottleSize,BottleSize,0);
