@@ -1,36 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.WSA;
 
-public class Bullet : MonoBehaviour
+public class ClownBullet : Bullet
 {
-    public TowerTest BulletParent;
-    public int remainingPierce;
-    public float BulletLifeTime;
-    public bool canHitAura;
+    private Rigidbody2D rb;
+    private CircleCollider2D cloudRange;
+    private PolygonCollider2D bulletCollider;
+    public Sprite BottleSprite;
+    public float BottleSize;
 
     private void Awake()
     {
+        rb = gameObject.GetComponent<Rigidbody2D>();
+        cloudRange = gameObject.GetComponent<CircleCollider2D>();
+        bulletCollider = gameObject.GetComponent<PolygonCollider2D>();
         BulletParent = gameObject.transform.parent.gameObject.GetComponent<TowerTest>();
         remainingPierce = BulletParent.Pierce;
         BulletLifeTime = BulletParent.BulletLifeTime;
         canHitAura = BulletParent.CanReadAura;
-
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        StartCoroutine(DeathTimer());
-        gameObject.transform.SetParent(GameObject.FindWithTag("GameMap").transform);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    protected override void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
@@ -43,7 +35,10 @@ public class Bullet : MonoBehaviour
 
                     if (remainingPierce <= 0)
                     {
-                        Destroy(gameObject);
+                        
+                        rb.velocity = Vector3.zero;
+                        Activate();
+                        
                     }
                 }
                 //it only does nothing if the enemy has aura and we cant see it.
@@ -62,9 +57,14 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    public IEnumerator DeathTimer()
+
+    public void Activate()
     {
-        yield return new WaitForSeconds(BulletLifeTime);
-        Destroy(gameObject);
+        bulletCollider.enabled = false;
+        cloudRange.enabled = true;
+
+        //change Sprite
+        gameObject.GetComponent<SpriteRenderer>().sprite = BottleSprite;
+        gameObject.transform.localScale = new Vector3(BottleSize,BottleSize,0);
     }
 }

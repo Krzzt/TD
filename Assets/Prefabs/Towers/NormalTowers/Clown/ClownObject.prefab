@@ -94,11 +94,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1642926783154976707}
   - component: {fileID: 1744064014654081522}
-  - component: {fileID: 6745627586154195668}
+  - component: {fileID: 9059018826309859357}
   - component: {fileID: 489685900326790864}
   - component: {fileID: 4108668557155589812}
   m_Layer: 2
-  m_Name: TowerTest
+  m_Name: ClownObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,7 +174,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6745627586154195668
+--- !u!114 &9059018826309859357
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,46 +183,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 477213827274001252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cca9ed88f33b6c0478b88a3a095f9a5b, type: 3}
+  m_Script: {fileID: 11500000, guid: 9ec4579761b24fe4ca0ee1de1f6a9716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TowerID: 0
+  TowerID: 1
   EnemiesInRange: []
   EnemyProgression: []
-  AttackSpeed: 0.8
+  AttackSpeed: 2
   AttackReady: 0
-  Damage: 2
-  ShotSpeed: 20
-  BulletLifeTime: 5
+  Damage: 0
+  ShotSpeed: 15
+  BulletLifeTime: 10
   targeting: 0
-  BulletPrefab: {fileID: 6697308885025091323, guid: abe55ffef694ffd4c97ac7f849a659fe, type: 3}
+  BulletPrefab: {fileID: 6697308885025091323, guid: 88fb355201ddbbd4d9690c2be9cf0341, type: 3}
   BulletPoint: {fileID: 6074449075102540544}
   TargetEnemy: {fileID: 0}
-  distance: 0
   Pierce: 1
   RangeIndicator: {fileID: 290288733151422514}
-  TowerName: Huntress
-  UpgradeNames:
-  - Upgrade0
-  - Upgrade1
-  - Upgrade2
-  - Upgrade3
-  UpgradeCosts:
-  - 0$
-  - 100$
-  - 200$
-  - 500$
-  UpgradeSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  TowerName: Clown
   isClicked: 0
   isHovering: 0
-  UpgradeTowerNameText: {fileID: 0}
-  UpgradeNameText: {fileID: 0}
-  UpgradeCostText: {fileID: 0}
-  UpgradeImage: {fileID: 0}
   gm: {fileID: 0}
   CanReadAura: 0
 --- !u!50 &489685900326790864

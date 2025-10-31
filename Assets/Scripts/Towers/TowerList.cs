@@ -6,7 +6,7 @@ public static class TowerList
 {
     public static List<Tower> ListOfTowers = new List<Tower>
     {
-        new Tower{ID = 0, Name = "Huntress", cost = 20},
+        new Tower{ID = 0, Name = "Huntress", cost = 200},
     };
 }
 

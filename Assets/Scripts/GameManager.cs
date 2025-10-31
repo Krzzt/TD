@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
     private GameObject AddOnSelectorObject;
     public int AddOnSelected;
 
+    public TMP_Text TowerNameText;
     private TMP_Text AddOnNameText;
     private TMP_Text AddOnDescriptionText;
     private TMP_Text AddOnCostText;
@@ -65,9 +66,12 @@ public class GameManager : MonoBehaviour
         UpgradeArea = GameObject.FindWithTag("UpgradeArea");
         EquippedAddOnSelectorObject = GameObject.FindWithTag("EquippedAddOnSelector");
         AddOnSelectorObject = GameObject.FindWithTag("AddOnSelector");
+
+        TowerNameText = UpgradePanel.transform.Find("TowerName").gameObject.GetComponent<TMP_Text>();
         AddOnNameText = UpgradePanel.transform.Find("AddOnName").gameObject.GetComponent<TMP_Text>();
         AddOnDescriptionText = UpgradePanel.transform.Find("AddOnDescription").gameObject.GetComponent<TMP_Text>();
         AddOnCostText = UpgradePanel.transform.Find("AddOnCost").gameObject.GetComponent<TMP_Text>();
+        
 
         AddOnQuantities = new int[10][];
         for(int i = 0; i < AddOnQuantities.Length; i++)
@@ -196,7 +200,6 @@ public class GameManager : MonoBehaviour
         {
             AddOnSelectorObject.SetActive(false);
         }
-        SetAddonQuantities();
     }
 
     public void BuyAddOn()
@@ -215,13 +218,15 @@ public class GameManager : MonoBehaviour
     public void SetAddOnUI()
     {
         TowerTest SelectedTowerScript = SelectedTower.GetComponent<TowerTest>();
-
-        //this is for the count of the Addons
+        
+        //this is for the count of the Addons (sets the number at the bottom)
         for (int i = 0; i < AddOnImages.Count; i++)
         {
             AddOnCountTexts[i].SetText(AddOnQuantities[SelectedTower.GetComponent<TowerTest>().TowerID][i].ToString());
+            AddOnImages[i].sprite = AddOnSprites[SelectedTower.GetComponent<TowerTest>().TowerID].sprites[i];
 
         }
+        //this sets the currently equipped addons
 
         for (int i = 0; i < SelectedTowerScript.equippedAddOns.Length; i++)
         {
@@ -229,14 +234,15 @@ public class GameManager : MonoBehaviour
             {
                 EquippedAddOnImages[i].sprite = AddOnSprites[SelectedTowerScript.TowerID].sprites[SelectedTowerScript.equippedAddOns[i].ID];
             }
+            else
+            {
+                EquippedAddOnImages[i].sprite = null;
+            }
 
 
         }
     }
-    public void SetAddonQuantities()
-    {
 
-    }
     
     public void EquipAddOn()
     {
@@ -248,10 +254,17 @@ public class GameManager : MonoBehaviour
             {
                 if (currTower.equippedAddOns[EquippedAddOnSelected] != AddOnList.TowerAddOns[currTower.TowerID][AddOnSelected]) //and if the equipped addon isnt the same as the selected addon
                 {
+                    Debug.Log("YOU SHOULD SEE THIS ON THE GIVEN SITUATION");
+                    Debug.Log("THE FOLLOWING IMAGE SHOULD SEE A -1: " + AddOnSelected);
+                    Debug.Log("THE FOLLOWING IMAGE SHOULD SEE A +1: " + currTower.equippedAddOns[EquippedAddOnSelected].ID);
+                    AddOnQuantities[currTower.TowerID][AddOnSelected] -= 1;
+                    AddOnQuantities[currTower.TowerID][currTower.equippedAddOns[EquippedAddOnSelected].ID] += 1;
                     currTower.ChangeAddOns(EquippedAddOnSelected, AddOnSelected); //we change the addons
-                    EquippedAddOnSelected++;
-                    AddOnSelected--;
-                    //and set the right count
+                    if (currTower.equippedAddOns[0] == currTower.equippedAddOns[1])
+                    {
+                        UnEquipAddOn();
+
+                    }
 
                 }
                 else //if the selected addon and equipped addon are the same
@@ -262,8 +275,11 @@ public class GameManager : MonoBehaviour
             else //and if it is null (so nothing is equipped)
             {
                 currTower.ChangeAddOns(EquippedAddOnSelected, AddOnSelected); //just equip it normally
-                EquippedAddOnSelected++;
-                AddOnSelected--;
+                AddOnQuantities[currTower.TowerID][AddOnSelected]--;
+                if (currTower.equippedAddOns[0] == currTower.equippedAddOns[1])
+                {
+                    UnEquipAddOn();
+                }
             }
 
             SetAddOnUI();
@@ -273,9 +289,11 @@ public class GameManager : MonoBehaviour
 
     public void UnEquipAddOn()
     {
+        Debug.Log("WE UNEQUIPPING");
         TowerTest currTower = SelectedTower.GetComponent<TowerTest>();
+        Debug.Log(EquippedAddOnSelected);
+        AddOnQuantities[currTower.TowerID][AddOnSelected]++;
         currTower.UnEquipAddOn(EquippedAddOnSelected);
-        EquippedAddOnSelected++;
         SetAddOnUI();
     }
 

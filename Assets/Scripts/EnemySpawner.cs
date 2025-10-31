@@ -80,6 +80,14 @@ public class EnemySpawner : MonoBehaviour
                 }
                 EveryEnemySpawned = true;
                 break;
+            case 3:
+                for (int i = 0; i < 5; i++)
+                {
+                    SpawnEnemy(1);
+                    yield return new WaitForSeconds(0.3f);
+                }
+                EveryEnemySpawned = true;
+                break;
         }
     }
 

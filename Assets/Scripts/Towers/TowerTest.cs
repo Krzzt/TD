@@ -28,7 +28,7 @@ public class TowerTest : MonoBehaviour
     public Transform BulletPoint;
 
     public GameObject TargetEnemy;
-    public float distance;
+    [NonSerialized] public float distance;
 
     public int Pierce;
 
@@ -37,17 +37,10 @@ public class TowerTest : MonoBehaviour
 
 
     public string TowerName;
-    public List<string> UpgradeNames;
-    public List<string> UpgradeCosts;
-    public List<Sprite> UpgradeSprites;
+
 
     public bool isClicked;
     public bool isHovering;
-
-    public TMP_Text UpgradeTowerNameText;
-    public TMP_Text UpgradeNameText;
-    public TMP_Text UpgradeCostText;
-    public Image UpgradeImage;
 
     public GameManager gm;
 
@@ -223,9 +216,9 @@ public void TurnToEnemy()
         isClicked = true;
         gm.UpgradePanel.SetActive(true); //set the Upgrade UI true
         gm.UpgradeArea.SetActive(true); // set the Upgrade Collision True
-        SetTowerInformation();
         gm.SelectedTower = gameObject;
-
+        gm.TowerNameText.SetText(TowerList.ListOfTowers[TowerID].Name);
+        gm.SetAddOnUI();
         gm.SelectEquippedAddOn(0);
         gm.SelectAddOn(0);
         //make a standard Selection
@@ -243,24 +236,6 @@ public void TurnToEnemy()
     }
 
 
-    public void SetTowerInformation()
-    {
-        UpgradeTowerNameText = gm.UpgradePanel.transform.Find("TowerName").gameObject.GetComponent<TMP_Text>();
-        //UpgradeNameText = gm.UpgradePanel.transform.Find("UpgradeName").gameObject.GetComponent<TMP_Text>();
-        //UpgradeCostText = gm.UpgradePanel.transform.Find("UpgradeCost").gameObject.GetComponent<TMP_Text>();
-        //UpgradeCostText = gm.UpgradePanel.transform.Find("UpgradeCost").gameObject.GetComponent<TMP_Text>();
-        //UpgradeImage = gm.UpgradePanel.transform.Find("UpgradeImage").gameObject.GetComponent<Image>();
-
-        UpgradeTowerNameText.SetText(TowerName);
-       // UpgradeNameText.SetText(UpgradeNames[currUpgradeStage]);
-        //UpgradeCostText.SetText(UpgradeCosts[currUpgradeStage]);
-        //UpgradeImage.sprite = UpgradeSprites[currUpgradeStage];
-
-        for (int i = 0; i < gm.AddOnSprites[TowerID].sprites.Count; i++)
-        {
-            gm.AddOnImages[i].sprite = gm.AddOnSprites[TowerID].sprites[i];
-        }
-    }
 
     public void ChangeAddOns(int WhichAddonSwitches, int newAddonID) //i want to change this so every killer has addons and can equip 2 of them at once
     {
@@ -305,10 +280,9 @@ public void TurnToEnemy()
 
             }
         }
- 
-        equippedAddOns[WhichAddonSwitches] = AddOnList.TowerAddOns[TowerID][newAddonID]; //dont know if this works yet
+        equippedAddOns[WhichAddonSwitches] = AddOnList.TowerAddOns[TowerID][newAddonID]; //it works
 
-        switch (equippedAddOns[WhichAddonSwitches].ID) //this reverts the effects of the now unequipped addon
+        switch (equippedAddOns[WhichAddonSwitches].ID) //this gives the effect of the new addon
         {
             case 0:
                 AttackSpeed -= 0.1f;
@@ -346,6 +320,8 @@ public void TurnToEnemy()
             default: break; //if nothing is equipped, we change nothing
 
         }
+
+
 
         CheckForAuraReading();
     }
@@ -390,7 +366,7 @@ public void TurnToEnemy()
             default: Debug.Log("nothing selected"); break; //if nothing is equipped, we change nothing
 
         }
-
+        equippedAddOns[equippedAddOnID] = null; //dont know if this works yet, i dont think it does
         CheckForAuraReading();
     }
 
