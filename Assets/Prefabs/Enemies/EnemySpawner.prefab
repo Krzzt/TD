@@ -48,6 +48,7 @@ MonoBehaviour:
   AllEnemies:
   - {fileID: 6524280282418936423, guid: 0ca58cff2d680e646a39975d64f8c456, type: 3}
   - {fileID: 6524280282418936423, guid: 8992d680973bb6f4d92d7e2e80bbb026, type: 3}
+  - {fileID: 6524280282418936423, guid: fa5dba956b39aa84eb4ced12fe6794bd, type: 3}
   EnemiesAlive: []
   WaveCounter: 0
   WaveTimer: 0

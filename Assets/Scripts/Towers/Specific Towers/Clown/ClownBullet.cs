@@ -10,6 +10,10 @@ public class ClownBullet : Bullet
     private PolygonCollider2D bulletCollider;
     public Sprite BottleSprite;
     public float BottleSize;
+    public int moveSpeedMinusPercentage;
+    public ClownTower ClownScript;
+    public bool RemovesAura;
+
 
     private void Awake()
     {
@@ -17,22 +21,40 @@ public class ClownBullet : Bullet
         cloudRange = gameObject.GetComponent<CircleCollider2D>();
         bulletCollider = gameObject.GetComponent<PolygonCollider2D>();
         BulletParent = gameObject.transform.parent.gameObject.GetComponent<TowerTest>();
+        ClownScript = gameObject.transform.parent.gameObject.GetComponent<ClownTower>();
         remainingPierce = BulletParent.Pierce;
         BulletLifeTime = BulletParent.BulletLifeTime;
         canHitAura = BulletParent.CanReadAura;
-        Debug.Log("Instantiated");
+        BottleSize = ClownScript.BottleSize;
+        moveSpeedMinusPercentage = ClownScript.BottleSlowPercentage;
+        RemovesAura = ClownScript.BottleRemoveAura;
     }
+
+
+
 
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            if (collision.gameObject.GetComponent<Enemy>().Aura)
+            Enemy currEnemyScript = collision.gameObject.GetComponent<Enemy>();
+            if (!currEnemyScript.isAffectedByBottle)
             {
+                currEnemyScript.SetMoveSpeedPercentage(currEnemyScript.moveSpeedPercentage - (float)moveSpeedMinusPercentage / 100f); //make enemy slow
+            }
+
+            currEnemyScript.isAffectedByBottle = true;
+
+            if (currEnemyScript.Aura)
+            {
+                if (RemovesAura)
+                {
+                    currEnemyScript.Aura = false;
+                }
                 if (canHitAura)
                 {
                     remainingPierce--;
-                    collision.gameObject.GetComponent<Enemy>().TakeDamage(BulletParent.Damage);
+                    currEnemyScript.TakeDamage(BulletParent.Damage);
 
                     if (remainingPierce <= 0)
                     {
@@ -47,17 +69,30 @@ public class ClownBullet : Bullet
             else
             {
                 remainingPierce--;
-                collision.gameObject.GetComponent<Enemy>().TakeDamage(BulletParent.Damage);
+                currEnemyScript.TakeDamage(BulletParent.Damage);
 
                 if (remainingPierce <= 0)
                 {
 
                     rb.velocity = Vector3.zero;
                     Activate();
-                    Debug.Log("boom");
                 }
             }
 
+        }
+    }
+
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            if (collision.gameObject.GetComponent<Enemy>().isAffectedByBottle)
+            {
+                collision.gameObject.GetComponent<Enemy>().SetMoveSpeedPercentage(collision.gameObject.GetComponent<Enemy>().moveSpeedPercentage + (float)moveSpeedMinusPercentage / 100f); //make enemy normal speed again
+
+            }
+            collision.gameObject.GetComponent<Enemy>().isAffectedByBottle = false;
         }
     }
 

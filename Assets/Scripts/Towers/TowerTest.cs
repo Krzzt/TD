@@ -237,7 +237,7 @@ public void TurnToEnemy()
 
 
 
-    public void ChangeAddOns(int WhichAddonSwitches, int newAddonID) //i want to change this so every killer has addons and can equip 2 of them at once
+   public virtual void ChangeAddOns(int WhichAddonSwitches, int newAddonID) //i want to change this so every killer has addons and can equip 2 of them at once
     {
         if (equippedAddOns[WhichAddonSwitches] != null)
         {
@@ -326,7 +326,7 @@ public void TurnToEnemy()
         CheckForAuraReading();
     }
 
-    public void UnEquipAddOn(int equippedAddOnID)
+   public virtual void UnEquipAddOn(int equippedAddOnID)
     {
         switch (equippedAddOns[equippedAddOnID].ID) //this reverts the effects of the now unequipped addon
         {

@@ -38,6 +38,8 @@ public class TowerPlacing : MonoBehaviour
             isSelected = false;
             gm.PlaceTower(); //we place the tower
             Destroy(gm.MockTower);
+            GameObject Deadzone = GameObject.FindWithTag("Deadzone");
+            Deadzone.transform.position = new Vector3(Deadzone.transform.position.x, Deadzone.transform.position.y, 1);
 
             //kill the mock tower
             //place tower
@@ -53,8 +55,12 @@ public class TowerPlacing : MonoBehaviour
         PlacementVector = new Vector3(PlacementVector.x, PlacementVector.y, 0);
         gm.MockTower = Instantiate(gm.MockTowerPrefabs[ID],PlacementVector, Quaternion.identity);
         //we select this tower as currently selected
+        GameObject Deadzone = GameObject.FindWithTag("Deadzone");
+        Deadzone.transform.position = new Vector3(Deadzone.transform.position.x, Deadzone.transform.position.y, -1);
 
         //also generate the mock tower
+
+        //and PLEASE set the Z of every tower Art to like 2 or smth. so it doesnt affect the deadzones. AFter the tower is deselected or placed, set the z to 0 again
     }
     
 

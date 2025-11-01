@@ -38,6 +38,7 @@ public class DeselectTower : MonoBehaviour
         {
             gm.DeselectTowerUI();
             needsToBeDeselected= false;
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 1);
 
         }
 

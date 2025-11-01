@@ -142,6 +142,7 @@ MonoBehaviour:
   MapCompletion: 0
   RewardMoneyOnDeath: 3
   Aura: 1
+  moveSpeedPercentage: 1
 --- !u!50 &3086969962111939580
 Rigidbody2D:
   serializedVersion: 4

@@ -4,46 +4,52 @@ using UnityEngine;
 
 public class ClownTower : TowerTest
 {
+    public int BottleSlowPercentage;
+    public float BottleSize;
+    public bool BottleRemoveAura;
 
-
-    new public void ChangeAddOns(int WhichAddonSwitches, int newAddonID) //i want to change this so every killer has addons and can equip 2 of them at once
+    public override void ChangeAddOns(int WhichAddonSwitches, int newAddonID) //i want to change this so every killer has addons and can equip 2 of them at once
     {
         if (equippedAddOns[WhichAddonSwitches] != null)
         {
             switch (equippedAddOns[WhichAddonSwitches].ID) //this reverts the effects of the now unequipped addon
             {
                 case 0:
-                    AttackSpeed += 0.1f;
+                    //Aura Reading
+                    BottleRemoveAura = false;
                     break;
                 case 1:
-                    Pierce -= 1;
-                    break;
-                case 2:
                     AttackSpeed += 0.2f;
                     break;
+                case 2:
+                    BulletLifeTime -= 1;
+                    break;
                 case 3:
-                    //after stunning is implemented
+                    AttackSpeed += 0.4f;
                     break;
                 case 4:
-                    //after the waves of 2 are implemented
+                    BottleSlowPercentage -= 10;
                     break;
                 case 5:
-                    Pierce -= 4;
+                    BottleSize -= (BottleSize * (0.2f/1.2f));
                     break;
                 case 6:
-                    //the aura reading is a bit more complicated so we check for that at the end
-                    Damage -= 4;
+                    BulletLifeTime -= 2;
                     break;
                 case 7:
-                    //another stun L
+                    BottleSize -= (BottleSize * (0.2f/1.2f));
+                    BottleRemoveAura = false;
+                    //Aura Reading
                     break;
                 case 8:
-                    Damage -= 20;
+                    BottleRemoveAura = false;
+                    BottleSize -= (BottleSize * (0.3f / 1.3f));
+                    AttackSpeed += 0.4f;
+                    //Aura Reading
                     break;
                 case 9:
-                    AttackSpeed *= 2f;
-                    Pierce -= 5;
-                    //aura reading and stuff
+                    BulletLifeTime -= 2;
+                    BottleSlowPercentage -= 20;
                     break;
                 default: Debug.Log("nothing selected"); break; //if nothing is equipped, we change nothing
 
@@ -54,37 +60,41 @@ public class ClownTower : TowerTest
         switch (equippedAddOns[WhichAddonSwitches].ID) //this gives the effect of the new addon
         {
             case 0:
-                AttackSpeed -= 0.1f;
+                //Aura Reading
+                BottleRemoveAura = true;
                 break;
             case 1:
-                Pierce += 1;
-                break;
-            case 2:
                 AttackSpeed -= 0.2f;
                 break;
+            case 2:
+                BulletLifeTime += 1;
+                break;
             case 3:
-                //after stunning is implemented
+                AttackSpeed -= 0.4f;
                 break;
             case 4:
-                //after the waves of 2 are implemented
+                BottleSlowPercentage += 10;
                 break;
             case 5:
-                Pierce += 4;
+                BottleSize += (BottleSize * 0.2f);
                 break;
             case 6:
-                //the aura reading is a bit more complicated so we check for that at the end
-                Damage += 4;
+                BulletLifeTime += 2;
                 break;
             case 7:
-                //another stun L
+                BottleSize +=(BottleSize * 0.2f);
+                BottleRemoveAura = true;
+                //Aura Reading
                 break;
             case 8:
-                Damage += 20;
+                BottleRemoveAura = true;
+                BottleSize += (BottleSize * 0.3f);
+                AttackSpeed -= 0.4f;
+                //Aura Reading
                 break;
             case 9:
-                AttackSpeed /= 2f;
-                Pierce += 5;
-                //aura reading and stuff
+                BulletLifeTime += 2;
+                BottleSlowPercentage += 20;
                 break;
             default: break; //if nothing is equipped, we change nothing
 
@@ -95,42 +105,46 @@ public class ClownTower : TowerTest
         CheckForAuraReading();
     }
 
-    new public void UnEquipAddOn(int equippedAddOnID)
+   public override void UnEquipAddOn(int equippedAddOnID)
     {
         switch (equippedAddOns[equippedAddOnID].ID) //this reverts the effects of the now unequipped addon
         {
             case 0:
-                AttackSpeed += 0.1f;
+                //Aura Reading
+                BottleRemoveAura = false;
                 break;
             case 1:
-                Pierce -= 1;
-                break;
-            case 2:
                 AttackSpeed += 0.2f;
                 break;
+            case 2:
+                BulletLifeTime -= 1;
+                break;
             case 3:
-                //after stunning is implemented
+                AttackSpeed += 0.4f;
                 break;
             case 4:
-                //after the waves of 2 are implemented
+                BottleSlowPercentage -= 5;
                 break;
             case 5:
-                Pierce -= 4;
+                BottleSize = BottleSize - (BottleSize * (0.2f/1.2f));
                 break;
             case 6:
-                //the aura reading is a bit more complicated so we check for that at the end
-                Damage -= 4;
+                BulletLifeTime -= 2;
                 break;
             case 7:
-                //another stun L
+                BottleSize = BottleSize - (BottleSize * (0.2f/1.2f));
+                BottleRemoveAura = false;
+                //Aura Reading
                 break;
             case 8:
-                Damage -= 20;
+                BottleRemoveAura = false;
+                BottleSize = BottleSize - (BottleSize * (0.3f/1.3f));
+                AttackSpeed += 0.4f;
+                //Aura Reading
                 break;
             case 9:
-                AttackSpeed *= 2f;
-                Pierce -= 5;
-                //aura reading and stuff
+                BulletLifeTime -= 2;
+                BottleSlowPercentage -= 10;
                 break;
             default: Debug.Log("nothing selected"); break; //if nothing is equipped, we change nothing
 

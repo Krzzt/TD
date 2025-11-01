@@ -7,6 +7,9 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+
+    private GameManager gm;
+
     public List<GameObject> Marks; //all the marks on the map
     public List<GameObject> AllEnemies; //a list of every Enemy
 
@@ -20,6 +23,7 @@ public class EnemySpawner : MonoBehaviour
     private TMP_Text WaveText;
     private void Awake()
     {
+        gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         WaveText = GameObject.FindWithTag("WaveText").GetComponent<TMP_Text>();
         Marks = GameObject.FindGameObjectsWithTag("Mark").ToList<GameObject>(); //we set the marks
         for (int a = 0; a < Marks.Count; a++)
@@ -76,15 +80,62 @@ public class EnemySpawner : MonoBehaviour
                 for (int i = 0; i < 10; i++)
                 {
                     SpawnEnemy(0);
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.4f);
                 }
                 EveryEnemySpawned = true;
                 break;
             case 3:
                 for (int i = 0; i < 5; i++)
                 {
-                    SpawnEnemy(1);
+                    SpawnEnemy(2);
+                    yield return new WaitForSeconds(0.8f);
+                }
+                EveryEnemySpawned = true;
+                break;
+            case 4:
+                for (int i = 0; i < 3; i++)
+                {
+                    SpawnEnemy(2);
+                    yield return new WaitForSeconds(0.5f);
+                }
+                for (int i = 0; i < 6; i++)
+                {
+                    SpawnEnemy(0);
+                    yield return new WaitForSeconds(0.4f);
+                }
+                EveryEnemySpawned = true;
+                break;
+            case 5:
+                for (int i = 0; i < 6; i++)
+                {
+                    SpawnEnemy(2);
                     yield return new WaitForSeconds(0.3f);
+                }
+                for (int i = 0; i < 7; i++)
+                {
+                    SpawnEnemy(0);
+                    yield return new WaitForSeconds(0.2f);
+                }
+                EveryEnemySpawned = true;
+                break;
+            case 6:
+                for (int i = 0; i < 20; i++)
+                {
+                    SpawnEnemy(0);
+                    yield return new WaitForSeconds(0.1f);
+                }
+                EveryEnemySpawned = true;
+                break;
+            case 7:
+                for (int i = 0; i < 10; i++)
+                {
+                    SpawnEnemy(0);
+                    yield return new WaitForSeconds(0.5f);
+                }
+                for(int i = 0; i < 7; i++)
+                {
+                    SpawnEnemy(2);
+                    yield return new WaitForSeconds(0.6f);
                 }
                 EveryEnemySpawned = true;
                 break;
@@ -99,6 +150,7 @@ public class EnemySpawner : MonoBehaviour
     }
     public void NextWave()
     {
+        gm.GiveMoney(100 + (WaveCounter * 20));
         EveryEnemySpawned = false;
         WaveCounter++;
         WaveText.SetText("Wave " + WaveCounter);

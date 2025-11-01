@@ -23,6 +23,11 @@ public class Enemy : MonoBehaviour
 
     public bool Aura;
 
+    public float moveSpeedPercentage;
+
+
+    public bool isAffectedByBottle;
+
     private void Awake()
     {
         gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
@@ -40,7 +45,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        gameObject.transform.position = Vector2.MoveTowards(gameObject.transform.position, spawner.Marks[nextMark].transform.position, speed * Time.fixedDeltaTime);
+        gameObject.transform.position = Vector2.MoveTowards(gameObject.transform.position, spawner.Marks[nextMark].transform.position, speed * Time.fixedDeltaTime * moveSpeedPercentage);
         time += Time.fixedDeltaTime;
         MapCompletion = (speed * time) / gm.MAP_LENGTH;
     }
@@ -79,5 +84,11 @@ public class Enemy : MonoBehaviour
         gm.GiveMoney(RewardMoneyOnDeath);
         spawner.EnemiesAlive.Remove(gameObject);
         Destroy(gameObject);
+    }
+
+
+    public void SetMoveSpeedPercentage(float amount)
+    {
+        moveSpeedPercentage = amount;
     }
 }
