@@ -16,6 +16,7 @@ TagManager:
   - EquippedAddOnSelector
   - UpgradeArea
   - AddOnSelector
+  - Projectile
   layers:
   - Default
   - TransparentFX

@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
     private TMP_Text AddOnNameText;
     private TMP_Text AddOnDescriptionText;
     private TMP_Text AddOnCostText;
+
     private void Awake()
     {
         DT = GameObject.FindWithTag("Deadzone").GetComponent<DeselectTower>();
@@ -118,7 +119,6 @@ public class GameManager : MonoBehaviour
 
     public void DeselectTower()
     {
-        Debug.Log("range should disappear");
         TowerTest selectedTowerScript = SelectedTower.GetComponent<TowerTest>();
         selectedTowerScript.isClicked = false; //set the isClicked in the script from the tower to false
         UpgradeScreen.SetActive(false); //the upgradescreen disappears
@@ -254,17 +254,18 @@ public class GameManager : MonoBehaviour
             {
                 if (currTower.equippedAddOns[EquippedAddOnSelected] != AddOnList.TowerAddOns[currTower.TowerID][AddOnSelected]) //and if the equipped addon isnt the same as the selected addon
                 {
-                    Debug.Log("YOU SHOULD SEE THIS ON THE GIVEN SITUATION");
-                    Debug.Log("THE FOLLOWING IMAGE SHOULD SEE A -1: " + AddOnSelected);
-                    Debug.Log("THE FOLLOWING IMAGE SHOULD SEE A +1: " + currTower.equippedAddOns[EquippedAddOnSelected].ID);
-                    AddOnQuantities[currTower.TowerID][AddOnSelected] -= 1;
-                    AddOnQuantities[currTower.TowerID][currTower.equippedAddOns[EquippedAddOnSelected].ID] += 1;
-                    currTower.ChangeAddOns(EquippedAddOnSelected, AddOnSelected); //we change the addons
-                    if (currTower.equippedAddOns[0] == currTower.equippedAddOns[1])
+                    if (AddOnQuantities[currTower.TowerID][AddOnSelected] > 0)
                     {
-                        UnEquipAddOn();
+                        AddOnQuantities[currTower.TowerID][AddOnSelected] -= 1;
+                        AddOnQuantities[currTower.TowerID][currTower.equippedAddOns[EquippedAddOnSelected].ID] += 1;
+                        currTower.ChangeAddOns(EquippedAddOnSelected, AddOnSelected); //we change the addons
+                        if (currTower.equippedAddOns[0] == currTower.equippedAddOns[1])
+                        {
+                            UnEquipAddOn();
 
+                        }
                     }
+
 
                 }
                 else //if the selected addon and equipped addon are the same
@@ -274,12 +275,16 @@ public class GameManager : MonoBehaviour
             }
             else //and if it is null (so nothing is equipped)
             {
-                currTower.ChangeAddOns(EquippedAddOnSelected, AddOnSelected); //just equip it normally
-                AddOnQuantities[currTower.TowerID][AddOnSelected]--;
-                if (currTower.equippedAddOns[0] == currTower.equippedAddOns[1])
+                if (AddOnQuantities[currTower.TowerID][AddOnSelected] > 0)
                 {
-                    UnEquipAddOn();
+                    currTower.ChangeAddOns(EquippedAddOnSelected, AddOnSelected); //just equip it normally
+                    AddOnQuantities[currTower.TowerID][AddOnSelected]--;
+                    if (currTower.equippedAddOns[0] == currTower.equippedAddOns[1])
+                    {
+                        UnEquipAddOn();
+                    }
                 }
+
             }
 
             SetAddOnUI();

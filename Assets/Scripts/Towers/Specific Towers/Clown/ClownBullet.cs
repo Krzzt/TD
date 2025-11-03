@@ -22,7 +22,6 @@ public class ClownBullet : Bullet
         bulletCollider = gameObject.GetComponent<PolygonCollider2D>();
         BulletParent = gameObject.transform.parent.gameObject.GetComponent<TowerTest>();
         ClownScript = gameObject.transform.parent.gameObject.GetComponent<ClownTower>();
-        remainingPierce = BulletParent.Pierce;
         BulletLifeTime = BulletParent.BulletLifeTime;
         canHitAura = BulletParent.CanReadAura;
         BottleSize = ClownScript.BottleSize;
@@ -37,13 +36,16 @@ public class ClownBullet : Bullet
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Enemy currEnemyScript = collision.gameObject.GetComponent<Enemy>();
-            if (!currEnemyScript.isAffectedByBottle)
+            Enemy currEnemyScript = collision.gameObject.GetComponent<Enemy>(); //we get the enemy hit for later
+
+            if (!currEnemyScript.isAffectedByBottle) //we slow the enemy only if he isnt already affected by another bottle (so the bottles cannot stack)
             {
-                currEnemyScript.SetMoveSpeedPercentage(currEnemyScript.moveSpeedPercentage - (float)moveSpeedMinusPercentage / 100f); //make enemy slow
+                currEnemyScript.SetMoveSpeedPercentage(currEnemyScript.moveSpeedPercentage - (float)moveSpeedMinusPercentage / 100f);
+                //we need this so it still stacks additively with other slow effects
             }
 
             currEnemyScript.isAffectedByBottle = true;
+            //the enemy is now affected by a bottle so we set it to true to prevent other bottles from slowing it even further
 
             if (currEnemyScript.Aura)
             {
@@ -52,31 +54,15 @@ public class ClownBullet : Bullet
                     currEnemyScript.Aura = false;
                 }
                 if (canHitAura)
-                {
-                    remainingPierce--;
-                    currEnemyScript.TakeDamage(BulletParent.Damage);
-
-                    if (remainingPierce <= 0)
-                    {
-                        
-                        rb.velocity = Vector3.zero;
+                { 
                         Activate();
-                        Debug.Log("boom");
-                    }
+                    
                 }
                 //it only does nothing if the enemy has aura and we cant see it.
             }
-            else
+            else //if the enemy does not have aura we can always hit it
             {
-                remainingPierce--;
-                currEnemyScript.TakeDamage(BulletParent.Damage);
-
-                if (remainingPierce <= 0)
-                {
-
-                    rb.velocity = Vector3.zero;
                     Activate();
-                }
             }
 
         }
@@ -87,23 +73,32 @@ public class ClownBullet : Bullet
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            if (collision.gameObject.GetComponent<Enemy>().isAffectedByBottle)
+            Enemy currEnemy = collision.gameObject.GetComponent<Enemy>();
+            if (currEnemy.isAffectedByBottle)
             {
-                collision.gameObject.GetComponent<Enemy>().SetMoveSpeedPercentage(collision.gameObject.GetComponent<Enemy>().moveSpeedPercentage + (float)moveSpeedMinusPercentage / 100f); //make enemy normal speed again
+                currEnemy.SetMoveSpeedPercentage(currEnemy.moveSpeedPercentage + (float)moveSpeedMinusPercentage / 100f); //make enemy normal speed again
 
             }
-            collision.gameObject.GetComponent<Enemy>().isAffectedByBottle = false;
+            currEnemy.isAffectedByBottle = false;
         }
     }
 
 
     public void Activate()
     {
-        bulletCollider.enabled = false;
-        cloudRange.enabled = true;
+        rb.velocity = Vector3.zero; //the bottle stops
+        bulletCollider.enabled = false; //the bullet collision vanishes
+        cloudRange.enabled = true; //the cloud collision gets activated
         
         //change Sprite
         gameObject.GetComponent<SpriteRenderer>().sprite = BottleSprite;
         gameObject.transform.localScale = new Vector3(BottleSize,BottleSize,0);
     }
+
+    public new void BulletHit()
+    {
+
+    }
+
+   
 }

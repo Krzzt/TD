@@ -46,18 +46,30 @@ public class MockTower : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        gm.TowerIsInPlaceablePos = false;
+        if (!collision.gameObject.CompareTag("Projectile")) //we dont want projectiles (like Clown Bottles) to prevent us from placing towers
+        {
+            gm.TowerIsInPlaceablePos = false;
+        }
+
     }
 
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        gm.TowerIsInPlaceablePos = false;
+        if (!collision.gameObject.CompareTag("Projectile"))
+        {
+            gm.TowerIsInPlaceablePos = false;
+        }
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        gm.TowerIsInPlaceablePos = true;
-        framebuffer = 0;
+        if (!collision.gameObject.CompareTag("Projectile"))
+        {
+            gm.TowerIsInPlaceablePos = true;
+            framebuffer = 0;
+        }
+
     }
 }

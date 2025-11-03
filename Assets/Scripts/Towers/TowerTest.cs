@@ -47,7 +47,9 @@ public class TowerTest : MonoBehaviour
     public AddOn[] equippedAddOns;
 
     public bool CanReadAura;
-    
+
+    public int WaveShotAmount;
+    public int Shotsleft;
 
     private void Awake()
     {
@@ -66,7 +68,7 @@ public class TowerTest : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (EnemiesInRange.Count > 0 && AttackReady)
+        if (AttackReady)
         {
             Attack();
         }
@@ -121,60 +123,79 @@ public class TowerTest : MonoBehaviour
 
     public void Attack() 
     {
-        EnemyProgression.Clear();
-        //attack
-        int firstEnemyIndex = 0; //the index of the first enemy in the list
-        float firstenemycomp = 0; //the completion this first enemy has
-        int LastEnemyIndex = 0; //ditto for last
-        float lastenemycomp = 0; //ditto for last
-
-        int StrongEnemyIndex = 0; //Same for strong
-        int StrongEnemyHP = 0;
-        foreach (GameObject enemy in EnemiesInRange) //for every enemy in range
+        if (EnemiesInRange.Count > 0)
         {
-            Enemy currEnemyScript = enemy.GetComponent<Enemy>();
-            int currEnemyHP = currEnemyScript.EnemyHealth._currentHealth;
-            float currMapComp = currEnemyScript.MapCompletion; //we get their map completion
-            
+            Shotsleft--; //We lose one of our shots (important for the wave shots)
+            EnemyProgression.Clear();
+            //attack
+            int firstEnemyIndex = 0; //the index of the first enemy in the list
+            float firstenemycomp = 0; //the completion this first enemy has
+            int LastEnemyIndex = 0; //ditto for last
+            float lastenemycomp = 0; //ditto for last
 
-            EnemyProgression.Add(currMapComp); //add them to our progression list
-            if (currMapComp > firstenemycomp) //if this enemy is further than everyone we had before
+            int StrongEnemyIndex = 0; //Same for strong
+            int StrongEnemyHP = 0;
+            foreach (GameObject enemy in EnemiesInRange) //for every enemy in range
             {
-                firstenemycomp = currMapComp; //he is the new first enemy
-                firstEnemyIndex = EnemyProgression.Count - 1; //and we set the index
+                Enemy currEnemyScript = enemy.GetComponent<Enemy>();
+                int currEnemyHP = currEnemyScript.EnemyHealth._currentHealth;
+                float currMapComp = currEnemyScript.MapCompletion; //we get their map completion
+
+
+                EnemyProgression.Add(currMapComp); //add them to our progression list
+                if (currMapComp > firstenemycomp) //if this enemy is further than everyone we had before
+                {
+                    firstenemycomp = currMapComp; //he is the new first enemy
+                    firstEnemyIndex = EnemyProgression.Count - 1; //and we set the index
+                }
+                if (currMapComp < lastenemycomp) //same for lastenemy
+                {
+                    lastenemycomp = currMapComp;
+                    LastEnemyIndex = EnemyProgression.Count - 1;
+                }
+                if (StrongEnemyHP < currEnemyHP) //same for strong
+                {
+                    StrongEnemyHP = currEnemyHP;
+                    StrongEnemyIndex = EnemyProgression.Count - 1;
+                }
+
             }
-            if (currMapComp < lastenemycomp) //same for lastenemy
+            switch (targeting) //we change the behaivour for each targeting option
             {
-                lastenemycomp = currMapComp;
-                LastEnemyIndex = EnemyProgression.Count - 1;
-            }
-            if (StrongEnemyHP < currEnemyHP) //same for strong
-            {
-                StrongEnemyHP = currEnemyHP;
-                StrongEnemyIndex = EnemyProgression.Count - 1;
+                case 0:
+                    TargetEnemy = EnemiesInRange[firstEnemyIndex];
+                    break;
+                case 1:
+                    TargetEnemy = EnemiesInRange[LastEnemyIndex];
+                    break;
+                case 2:
+                    TargetEnemy = EnemiesInRange[StrongEnemyIndex];
+                    break;
             }
 
-        } 
-        switch (targeting) //we change the behaivour for each targeting option
+            TurnToEnemy();
+            GameObject newBullet = Instantiate(BulletPrefab, BulletPoint.position, BulletPoint.rotation, gameObject.transform); //instantiate the bullet at the right position
+            newBullet.GetComponent<Rigidbody2D>().AddForce(BulletPoint.up * ShotSpeed, ForceMode2D.Impulse); //give the bullet velocity
+
+            AttackReady = false; //the attack is over so its not ready anymore
+            if (Shotsleft <= 0)
+            {
+
+                StartCoroutine(waitforNextAttack()); //start the timer for the next attack
+                Shotsleft = WaveShotAmount;
+            }
+            else
+            {
+                Debug.Log("Next Attack Incoming! Shots left: " + Shotsleft);
+                StartCoroutine(NextWaveAttack());
+            }
+
+        }
+        else
         {
-            case 0:
-                TargetEnemy = EnemiesInRange[firstEnemyIndex];
-                break;
-            case 1:
-                TargetEnemy = EnemiesInRange[LastEnemyIndex];
-                break;
-            case 2:
-                TargetEnemy = EnemiesInRange[StrongEnemyIndex];
-                break;
+            AttackReady = true;
         }
 
-        TurnToEnemy();
-        GameObject newBullet = Instantiate(BulletPrefab, BulletPoint.position, BulletPoint.rotation, gameObject.transform); //instantiate the bullet at the right position
-        newBullet.GetComponent<Rigidbody2D>().AddForce(BulletPoint.up * ShotSpeed, ForceMode2D.Impulse); //give the bullet velocity
-        //attack
-
-        AttackReady = false; //the attack is over so its not ready anymore
-        StartCoroutine(waitforNextAttack()); //start the timer for the next attack
     }
 
     public IEnumerator waitforNextAttack()
@@ -183,7 +204,13 @@ public class TowerTest : MonoBehaviour
         AttackReady = true;
     }
 
-public void TurnToEnemy()
+    public IEnumerator NextWaveAttack()
+    {
+        yield return new WaitForSeconds(0.1f);
+        Attack();
+    }
+
+    public void TurnToEnemy()
     {
         distance = Vector2.Distance(transform.position, TargetEnemy.transform.position);
         Vector2 direction = TargetEnemy.transform.position - transform.position;
@@ -256,7 +283,7 @@ public void TurnToEnemy()
                     //after stunning is implemented
                     break;
                 case 4:
-                    //after the waves of 2 are implemented
+                    WaveShotAmount -= 1;
                     break;
                 case 5:
                     Pierce -= 4;
@@ -297,7 +324,7 @@ public void TurnToEnemy()
                 //after stunning is implemented
                 break;
             case 4:
-                //after the waves of 2 are implemented
+                WaveShotAmount += 1;
                 break;
             case 5:
                 Pierce += 4;
@@ -343,7 +370,7 @@ public void TurnToEnemy()
                 //after stunning is implemented
                 break;
             case 4:
-                //after the waves of 2 are implemented
+                WaveShotAmount -= 1;
                 break;
             case 5:
                 Pierce -= 4;

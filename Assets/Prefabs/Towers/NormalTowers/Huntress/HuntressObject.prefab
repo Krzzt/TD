@@ -198,33 +198,14 @@ MonoBehaviour:
   BulletPrefab: {fileID: 6697308885025091323, guid: abe55ffef694ffd4c97ac7f849a659fe, type: 3}
   BulletPoint: {fileID: 6074449075102540544}
   TargetEnemy: {fileID: 0}
-  distance: 0
   Pierce: 1
   RangeIndicator: {fileID: 290288733151422514}
   TowerName: Huntress
-  UpgradeNames:
-  - Upgrade0
-  - Upgrade1
-  - Upgrade2
-  - Upgrade3
-  UpgradeCosts:
-  - 0$
-  - 100$
-  - 200$
-  - 500$
-  UpgradeSprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   isClicked: 0
   isHovering: 0
-  UpgradeTowerNameText: {fileID: 0}
-  UpgradeNameText: {fileID: 0}
-  UpgradeCostText: {fileID: 0}
-  UpgradeImage: {fileID: 0}
   gm: {fileID: 0}
   CanReadAura: 0
+  WaveShotAmount: 1
 --- !u!50 &489685900326790864
 Rigidbody2D:
   serializedVersion: 4
